@@ -25,7 +25,7 @@ public class TimeTask {
         List<TextParsing.Task> list = TextParsing.getTask();
         //遍历所有任务
         for (TextParsing.Task task : list)
-            //判断时间是否符合
+            //判断时间是否到达
             if (Basics.getTime("HH:mm").matches(task.getTime())) {
                 //获取任务内容
                 List<String> things = task.getThings();

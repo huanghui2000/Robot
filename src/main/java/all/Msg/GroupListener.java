@@ -25,7 +25,6 @@ public class GroupListener {
             BotRepackaging.sendGroupMsg(groupMsg, sender, groupMsg.getMsgContent().getCats(), "傻逼能不能死一死的", "脑瘫", "你是什么贵物", "郭楠");
     }
 
-
     //翻译功能
     @OnGroup
     @Filter(atBot = true)
@@ -57,7 +56,7 @@ public class GroupListener {
 
     //天气回复
     @OnGroup
-    @Filters({@Filter(value = "天气", matchType = MatchType.CONTAINS), @Filter(value = "气温", matchType = MatchType.CONTAINS)})
+    @Filters({@Filter(value = "天气", matchType = MatchType.CONTAINS), @Filter(value = "气温", matchType = MatchType.CONTAINS), @Filter(value = "温度", matchType = MatchType.CONTAINS)})
     public void Weather(GroupMsg groupMsg, MsgSender sender) throws Exception {
         if (Open) {
             //获取文本中的城市
@@ -65,10 +64,8 @@ public class GroupListener {
             //不存在城市回馈
             if (city == null)
                 sender.SENDER.sendGroupMsg(groupMsg, "无法查询");
-                //实时天气
             else if (String.valueOf(groupMsg.getMsgContent()).contains("现在") || String.valueOf(groupMsg.getMsgContent()).contains("当前"))
                 sender.SENDER.sendGroupMsg(groupMsg, WeatherAPI.getCurrentWeather(city));
-                //当日天气
             else
                 sender.SENDER.sendGroupMsg(groupMsg, WeatherAPI.getTodayWeather(city));
         }
