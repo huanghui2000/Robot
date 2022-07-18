@@ -1,4 +1,4 @@
-package all.Plug;
+package all.plug;
 
 import catcode.CatCodeUtil;
 import catcode.CodeTemplate;

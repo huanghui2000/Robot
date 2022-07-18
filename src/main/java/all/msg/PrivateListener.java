@@ -1,6 +1,6 @@
-package all.Msg;
+package all.msg;
 
-import all.Plug.BotRepackaging;
+import all.plug.BotRepackaging;
 import love.forte.common.ioc.annotation.Beans;
 import love.forte.simbot.annotation.OnPrivate;
 import love.forte.simbot.api.message.events.PrivateMsg;

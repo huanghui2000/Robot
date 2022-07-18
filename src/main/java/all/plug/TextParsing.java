@@ -1,6 +1,6 @@
-package all.Plug;
+package all.plug;
 
-import all.Api.WeatherAPI;
+import all.api.WeatherAPI;
 import cn.hutool.core.date.DatePattern;
 
 import java.io.BufferedReader;
@@ -50,7 +50,7 @@ public class TextParsing {
         if (txt.contains("IMA"))
             txt = BotRepackaging.sendImage(1);
         else if (txt.contains("WEA"))
-            txt = WeatherAPI.getTodayWeather(Basics.getCity(txt));
+            txt = WeatherAPI.getTodayWeather(Basics.getCity(txt), 1);
         else if (txt.contains("TIME"))
             txt = Basics.getTime(DatePattern.NORM_TIME_PATTERN);
         return txt;

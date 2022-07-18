@@ -1,14 +1,10 @@
-package all.Api;
+package all.api;
 
-import all.Plug.Basics;
+import all.plug.Basics;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.net.URL;
-import java.net.URLConnection;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,12 +34,14 @@ import java.util.Map;
 public class WeatherAPI {
 
     //get今日天气
-    public static String getTodayWeather(String city) throws Exception {
+    public static String getTodayWeather(String city, int choice) throws Exception {
         //URL处理
-        URL url = new URL("https://api.seniverse.com/v3/weather/daily.json?key=SHgUEuS8LSdvWLgs9&location=" + city + "&days=1");
+        URL url = new URL("https://api.seniverse.com/v3/weather/daily.json?key=SHgUEuS8LSdvWLgs9&location=" + city + "&days=" + choice);
         JSONObject secondDate = getJSON(url);
         JSONArray daily = JSONArray.fromObject(secondDate.getString("daily"));
-        JSONObject info = (JSONObject) daily.get(0);
+        JSONObject info = JSONObject.fromObject(daily.get(0));
+        if (choice == 2)
+            info = JSONObject.fromObject(daily.get(1));
         //MAP写入
         Map<String, Object> map = new HashMap<>();
         map.put("日期", info.getString("date"));
@@ -57,8 +55,10 @@ public class WeatherAPI {
         map.put("风速", info.getString("wind_speed"));
         map.put("风力", info.getString("wind_scale"));
         map.put("相对湿度", info.getString("humidity"));
-
-        return "今天是" + map.get("日期") + "\n" + city
+        String day = "今天";
+        if (choice == 2)
+            day = "明天";
+        return day + "是" + map.get("日期") + "\n" + city
                 + "的白天天气是" + map.get("白天天气") + "而晚间为" + map.get("晚间天气")
                 + "\n温度为:" + map.get("最低温度") + "°C~" + map.get("最高温度") + "°C"
                 + "\n降水概率:" + map.get("降水概率") + " 降水量:" + map.get("降水量") + " 相对湿度:" + map.get("相对湿度")
@@ -82,17 +82,7 @@ public class WeatherAPI {
 
     //对URL处理
     public static JSONObject getJSON(URL url) throws Exception {
-        URLConnection connectionData = url.openConnection();
-        //JSON获取
-        BufferedReader br = new BufferedReader(new InputStreamReader(
-                connectionData.getInputStream(), StandardCharsets.UTF_8));
-        StringBuilder sb = new StringBuilder();
-        String line;
-        while ((line = br.readLine()) != null)
-            sb.append(line);
-        JSONObject firstDate = JSONObject.fromObject(sb.toString());
-        JSONArray results = JSONArray.fromObject(firstDate.getJSONArray("results"));
-        return (JSONObject) results.get(0);
+        return (JSONObject) Basics.getJSON(url, "results").get(0);
     }
 
 }

@@ -1,7 +1,7 @@
-package all.Msg;
+package all.msg;
 
-import all.Plug.Basics;
-import all.Plug.TextParsing;
+import all.plug.Basics;
+import all.plug.TextParsing;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;

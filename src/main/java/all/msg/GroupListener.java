@@ -1,7 +1,7 @@
-package all.Msg;
+package all.msg;
 
-import all.Api.WeatherAPI;
-import all.Plug.*;
+import all.api.*;
+import all.plug.*;
 import cn.hutool.core.date.DatePattern;
 import love.forte.common.ioc.annotation.Beans;
 import love.forte.simbot.annotation.Filter;
@@ -30,15 +30,18 @@ public class GroupListener {
     @Filter(atBot = true)
     public void at(GroupMsg groupMsg, MsgSender sender) throws Exception {
         if (Open)
-            sender.SENDER.sendGroupMsg(groupMsg, Basics.getLanguage(groupMsg.getMsgContent().getMsg()));
+            sender.SENDER.sendGroupMsg(groupMsg, translateAPI.getLanguage(groupMsg.getMsgContent().getMsg()));
     }
 
     //启动&关闭控制
     @OnGroup
-    @Filter(value = "robot", matchType = MatchType.CONTAINS)
+    @Filters({@Filter(value = "robot", matchType = MatchType.CONTAINS), @Filter(value = "bot", matchType = MatchType.CONTAINS)})
     public void upAndDown(GroupMsg groupMsg, MsgSender sender) {
         String control = String.valueOf(groupMsg.getMsgContent());
-        if (String.valueOf(control).contains("启动")) {
+        if (String.valueOf(control).contains("重启")) {
+            sender.SENDER.sendGroupMsg(groupMsg, "服务器已重启");
+            Open = true;
+        } else if (String.valueOf(control).contains("启动")) {
             if (Open)
                 sender.SENDER.sendGroupMsg(groupMsg, "服务器已经启动");
             else
@@ -58,16 +61,18 @@ public class GroupListener {
     @OnGroup
     @Filters({@Filter(value = "天气", matchType = MatchType.CONTAINS), @Filter(value = "气温", matchType = MatchType.CONTAINS), @Filter(value = "温度", matchType = MatchType.CONTAINS)})
     public void Weather(GroupMsg groupMsg, MsgSender sender) throws Exception {
-        if (Open) {
+        if (Open && !String.valueOf(groupMsg.getMsgContent().getCats()).contains("at")) {
             //获取文本中的城市
             String city = Basics.getCity(String.valueOf(groupMsg.getMsgContent()));
             //不存在城市回馈
             if (city == null)
                 sender.SENDER.sendGroupMsg(groupMsg, "无法查询");
-            else if (String.valueOf(groupMsg.getMsgContent()).contains("现在") || String.valueOf(groupMsg.getMsgContent()).contains("当前"))
+            else if (String.valueOf(groupMsg.getMsgContent()).contains("当前"))
                 sender.SENDER.sendGroupMsg(groupMsg, WeatherAPI.getCurrentWeather(city));
+            else if (String.valueOf(groupMsg.getMsgContent()).contains("明天"))
+                sender.SENDER.sendGroupMsg(groupMsg, WeatherAPI.getTodayWeather(city, 2));
             else
-                sender.SENDER.sendGroupMsg(groupMsg, WeatherAPI.getTodayWeather(city));
+                sender.SENDER.sendGroupMsg(groupMsg, WeatherAPI.getTodayWeather(city, 1));
         }
     }
 
