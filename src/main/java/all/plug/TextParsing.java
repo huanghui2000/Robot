@@ -1,5 +1,6 @@
 package all.plug;
 
+import all.api.NewAPI;
 import all.api.WeatherAPI;
 import cn.hutool.core.date.DatePattern;
 
@@ -8,6 +9,7 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -34,9 +36,7 @@ public class TextParsing {
             //获取ID
             task.setID(Long.valueOf(line[2]));
             //获取文本事件，包装为List
-            List<String> txtList = new ArrayList<>();
-            for (int i = 3; i < line.length; i++)
-                txtList.add(keyWords(line[i]));
+            List<String> txtList = new ArrayList<>(Arrays.asList(line).subList(3, line.length));
             task.setThings(txtList);
             list.add(task);
         }
@@ -53,6 +53,10 @@ public class TextParsing {
             txt = WeatherAPI.getTodayWeather(Basics.getCity(txt), 1);
         else if (txt.contains("TIME"))
             txt = Basics.getTime(DatePattern.NORM_TIME_PATTERN);
+        else if (txt.contains("NEW")) {
+            NewAPI.getImage();
+            txt = BotRepackaging.sendImage(2);
+        }
         return txt;
     }
 

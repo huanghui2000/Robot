@@ -3,6 +3,7 @@ package all.msg;
 import all.plug.Basics;
 import all.plug.TextParsing;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -28,7 +29,11 @@ public class TimeTask {
             //判断时间是否到达
             if (Basics.getTime("HH:mm").matches(task.getTime())) {
                 //获取任务内容
-                List<String> things = task.getThings();
+                List<String> thingOld = task.getThings();
+                List<String> things = new ArrayList<>();
+                //对thingOld进行重新keyWords解析为things
+                for (String thing : thingOld)
+                    things.add(TextParsing.keyWords(thing));
                 //判断个人任务还是群任务
                 if (task.getObject().equals("个人"))
                     for (Object thing : things)

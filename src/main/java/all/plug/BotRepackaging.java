@@ -34,6 +34,7 @@ public class BotRepackaging {
         //getImage序列消息
         Map<Integer, String> imageMap = new HashMap<>();
         imageMap.put(1, "Happy.jpg");
+        imageMap.put(2, "temp.jpg");
         //转为可用的图片路径流
         CatCodeUtil util = CatCodeUtil.INSTANCE;
         CodeTemplate<String> template = util.getStringTemplate();

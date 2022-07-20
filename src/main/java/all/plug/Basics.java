@@ -2,7 +2,6 @@ package all.plug;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -43,6 +42,31 @@ public class Basics {
     public static String getTime(String format) {
         SimpleDateFormat time = new SimpleDateFormat(format);
         return time.format(new Date());
+    }
+
+    //获取星期
+    public static String getWeek() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        int week = cal.get(Calendar.DAY_OF_WEEK);
+        switch (week) {
+            case 1:
+                return "星期日";
+            case 2:
+                return "星期一";
+            case 3:
+                return "星期二";
+            case 4:
+                return "星期三";
+            case 5:
+                return "星期四";
+            case 6:
+                return "星期五";
+            case 7:
+                return "星期六";
+            default:
+                return "";
+        }
     }
 
     //语句中的城市解析
