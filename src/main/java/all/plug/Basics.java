@@ -1,10 +1,11 @@
 package all.plug;
 
-import all.api.translateAPI;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
@@ -19,6 +20,13 @@ import java.util.*;
 public class Basics {
     //对URL的处理
     public static JSONArray getJSON(URL url, String choice) throws Exception {
+        StringBuilder sb = getStringBuilder(url);
+        JSONObject firstDate = JSONObject.fromObject(sb.toString());
+        return JSONArray.fromObject(firstDate.getJSONArray(choice));
+    }
+
+    //对于URL获取流的处理
+    public static StringBuilder getStringBuilder(URL url) throws IOException {
         URLConnection connectionData = url.openConnection();
         //JSON获取
         BufferedReader br = new BufferedReader(new InputStreamReader(
@@ -27,8 +35,8 @@ public class Basics {
         String line;
         while ((line = br.readLine()) != null)
             sb.append(line);
-        JSONObject firstDate = JSONObject.fromObject(sb.toString());
-        return JSONArray.fromObject(firstDate.getJSONArray(choice));
+        br.close();
+        return sb;
     }
 
     //时间获取

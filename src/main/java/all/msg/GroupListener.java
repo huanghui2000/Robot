@@ -17,6 +17,23 @@ public class GroupListener {
     //启动&关闭控制
     static boolean Open = true;
 
+    //随机获取一句诗
+    @OnGroup
+    @Filter(value = "查诗", matchType = MatchType.CONTAINS)
+    public void getPoetry(GroupMsg groupMsg, MsgSender sender) throws Exception {
+        if (Open) {
+            //去掉”查诗“和空格，at
+            String said = groupMsg.getMsgContent().getMsg().replace("查诗", "");
+            said = said.replace(" ", "");
+            said = said.replaceAll("\\[CAT:at,code=.*?]", "");
+            if (PoetryAPI.getPoetry(said) != null)
+                sender.SENDER.sendGroupMsg(groupMsg, PoetryAPI.getPoetry(said));
+            else
+                sender.SENDER.sendGroupMsg(groupMsg, "没有找到相关的诗句");
+        }
+
+    }
+
     //at指定骂人
     @OnGroup
     @Filter(anyAt = true, value = "骂", matchType = MatchType.CONTAINS)
@@ -27,10 +44,10 @@ public class GroupListener {
 
     //翻译功能
     @OnGroup
-    @Filter(atBot = true)
+    @Filter(value = "翻译", matchType = MatchType.CONTAINS)
     public void at(GroupMsg groupMsg, MsgSender sender) throws Exception {
         if (Open)
-            sender.SENDER.sendGroupMsg(groupMsg, translateAPI.getLanguage(groupMsg.getMsgContent().getMsg()));
+            sender.SENDER.sendGroupMsg(groupMsg, TranslateAPI.getLanguage(groupMsg.getMsgContent().getMsg()));
     }
 
     //启动&关闭控制
