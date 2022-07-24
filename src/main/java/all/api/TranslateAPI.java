@@ -1,6 +1,8 @@
 package all.api;
 
 import all.plug.Basics;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 import java.net.URL;
 import java.net.URLEncoder;
@@ -14,7 +16,6 @@ import java.util.Map;
  *最喜欢的例句:I've been breathing for a long time to cover my tears. I'm mourning how difficult the people's livelihood is
  */
 public class TranslateAPI {
-
     //语句中的语种解析
     public static String getLanguage(String said) throws Exception {
         //把句子中的[CAT:at,code=.....]去掉
@@ -65,6 +66,19 @@ public class TranslateAPI {
         return reData.toString();
     }
 
+    //对一词多义的处理
+    public static String getWord(JSONObject firstDate) {
+        //获取一词多义
+        JSONArray fist = firstDate.getJSONObject("basic").getJSONArray("explains");
+        //将json按照,切割，每个句子换行
+        StringBuilder sb = new StringBuilder();
+        for (Object o : fist) {
+            sb.append(o);
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
+
     //字段加密
     public static String getDigest(String string) throws Exception {
         if (string == null) {
@@ -98,6 +112,14 @@ public class TranslateAPI {
             input = input.substring(0, 10) + input.length() + input.substring(input.length() - 10);
         String sign = getDigest(appKey + input + salt + curTime + "I0DpQUYPJC592F0yr8kotoEyPSHSruJU");
         URL url = new URL(top + "?q=" + URLEncoder.encode(query, "utf-8") + "&from=" + from + "&to=" + to + "&salt=" + salt + "&appKey=" + appKey + "&signType=" + signType + "&curtime=" + curTime + "&sign=" + sign);
-        return String.valueOf(Basics.getJSON(url, "translation").get(0));
+        //对单词的纯处理
+        String sb = String.valueOf(Basics.getStringBuilder(url));
+        JSONObject firstDate = JSONObject.fromObject(sb);
+        if (sb.contains("basic"))
+            //获取一词多义json
+            return getWord(firstDate);
+        return String.valueOf(JSONArray.fromObject(firstDate.getJSONArray("translation")).get(0));
     }
+
+
 }

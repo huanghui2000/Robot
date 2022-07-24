@@ -34,6 +34,7 @@ public class GroupListener {
 
     }
 
+
     //at指定骂人
     @OnGroup
     @Filter(anyAt = true, value = "骂", matchType = MatchType.CONTAINS)

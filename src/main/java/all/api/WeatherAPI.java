@@ -82,7 +82,14 @@ public class WeatherAPI {
 
     //对URL处理
     public static JSONObject getJSON(URL url) throws Exception {
-        return (JSONObject) Basics.getJSON(url, "results").get(0);
+        return (JSONObject) getJSON(url, "results").get(0);
+    }
+
+    //对URL的处理
+    public static JSONArray getJSON(URL url, String choice) throws Exception {
+        StringBuilder sb = Basics.getStringBuilder(url);
+        JSONObject firstDate = JSONObject.fromObject(sb.toString());
+        return JSONArray.fromObject(firstDate.getJSONArray(choice));
     }
 
 }

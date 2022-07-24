@@ -1,7 +1,5 @@
 package all.plug;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,17 +15,14 @@ import java.util.*;
  * Time city image
  */
 public class Basics {
-    //对URL的处理
-    public static JSONArray getJSON(URL url, String choice) throws Exception {
-        StringBuilder sb = getStringBuilder(url);
-        JSONObject firstDate = JSONObject.fromObject(sb.toString());
-        return JSONArray.fromObject(firstDate.getJSONArray(choice));
-    }
+
 
     //对于URL获取流的处理
     public static StringBuilder getStringBuilder(URL url) throws IOException {
+        //设置URL访问延迟0.5s
         URLConnection connectionData = url.openConnection();
-        //JSON获取
+        connectionData.setConnectTimeout(1000);
+        //网页文本获取
         BufferedReader br = new BufferedReader(new InputStreamReader(
                 connectionData.getInputStream(), StandardCharsets.UTF_8));
         StringBuilder sb = new StringBuilder();
