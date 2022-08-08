@@ -72,10 +72,9 @@ public class TranslateAPI {
         JSONArray fist = firstDate.getJSONObject("basic").getJSONArray("explains");
         //将json按照,切割，每个句子换行
         StringBuilder sb = new StringBuilder();
-        for (Object o : fist) {
-            sb.append(o);
-            sb.append("\n");
-        }
+        for (Object o : fist)
+            //对开头和结尾加上【 】，并且换行
+            sb.append("【").append(o.toString()).append("】\n");
         return sb.toString();
     }
 
@@ -113,7 +112,7 @@ public class TranslateAPI {
         String sign = getDigest(appKey + input + salt + curTime + "I0DpQUYPJC592F0yr8kotoEyPSHSruJU");
         URL url = new URL(top + "?q=" + URLEncoder.encode(query, "utf-8") + "&from=" + from + "&to=" + to + "&salt=" + salt + "&appKey=" + appKey + "&signType=" + signType + "&curtime=" + curTime + "&sign=" + sign);
         //对单词的纯处理
-        String sb = String.valueOf(Basics.getStringBuilder(url));
+        String sb = String.valueOf(Basics.getStringBuilder(url, 0));
         JSONObject firstDate = JSONObject.fromObject(sb);
         if (sb.contains("basic"))
             //获取一词多义json

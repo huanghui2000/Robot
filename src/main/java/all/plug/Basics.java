@@ -16,12 +16,11 @@ import java.util.*;
  */
 public class Basics {
 
-
     //对于URL获取流的处理
-    public static StringBuilder getStringBuilder(URL url) throws IOException {
-        //设置URL访问延迟0.5s
+    public static StringBuilder getStringBuilder(URL url, int time) throws IOException {
         URLConnection connectionData = url.openConnection();
-        connectionData.setConnectTimeout(1000);
+        //设置URL访问延迟
+        connectionData.setConnectTimeout(time);
         //网页文本获取
         BufferedReader br = new BufferedReader(new InputStreamReader(
                 connectionData.getInputStream(), StandardCharsets.UTF_8));

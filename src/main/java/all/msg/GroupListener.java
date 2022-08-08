@@ -17,7 +17,23 @@ public class GroupListener {
     //启动&关闭控制
     static boolean Open = true;
 
-    //随机获取一句诗
+    //对诗功能
+    @OnGroup
+    @Filter(atBot = true, matchType = MatchType.CONTAINS)
+    public void getExtracted(GroupMsg groupMsg, MsgSender sender) throws Exception {
+        if (Open && !String.valueOf(groupMsg.getMsgContent().getCats()).contains("骂")) {
+            //空格，at
+            String said = groupMsg.getMsgContent().getMsg();
+            said = said.replace(" ", "");
+            said = said.replaceAll("\\[CAT:at,code=.*?]", "");
+            if (PoetryAPI.getPoetry(said) != null)
+                sender.SENDER.sendGroupMsg(groupMsg, PoetryAPI.extracted(said));
+            else
+                sender.SENDER.sendGroupMsg(groupMsg, "没有找到相关的诗句");
+        }
+    }
+
+    //查询诗句
     @OnGroup
     @Filter(value = "查诗", matchType = MatchType.CONTAINS)
     public void getPoetry(GroupMsg groupMsg, MsgSender sender) throws Exception {
@@ -33,7 +49,6 @@ public class GroupListener {
         }
 
     }
-
 
     //at指定骂人
     @OnGroup

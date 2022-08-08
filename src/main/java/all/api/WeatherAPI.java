@@ -87,7 +87,7 @@ public class WeatherAPI {
 
     //对URL的处理
     public static JSONArray getJSON(URL url, String choice) throws Exception {
-        StringBuilder sb = Basics.getStringBuilder(url);
+        StringBuilder sb = Basics.getStringBuilder(url, 0);
         JSONObject firstDate = JSONObject.fromObject(sb.toString());
         return JSONArray.fromObject(firstDate.getJSONArray(choice));
     }

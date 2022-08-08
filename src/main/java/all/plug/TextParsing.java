@@ -54,8 +54,7 @@ public class TextParsing {
         else if (txt.contains("TIME"))
             txt = Basics.getTime(DatePattern.NORM_TIME_PATTERN);
         else if (txt.contains("NEW")) {
-            NewAPI.getImage();
-            txt = BotRepackaging.sendImage(2);
+            txt = NewAPI.getNew();
         }
         return txt;
     }

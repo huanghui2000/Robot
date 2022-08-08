@@ -36,6 +36,7 @@
             <classifier>jdk15</classifier>
         </dependency>
     </dependencies>
+
     <build>
         <plugins>
             <!-- 打包插件 plugin. -->
