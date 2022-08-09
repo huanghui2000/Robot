@@ -66,6 +66,15 @@ public class GroupListener {
             sender.SENDER.sendGroupMsg(groupMsg, TranslateAPI.getLanguage(groupMsg.getMsgContent().getMsg()));
     }
 
+    @OnGroup
+    @Filters({@Filter(value = "涩图", matchType = MatchType.CONTAINS), @Filter(value = "来张图", matchType = MatchType.CONTAINS)})
+    public void getChart(GroupMsg groupMsg, MsgSender sender) {
+        if (Open) {
+            long time = ChartAPI.getImage();
+            sender.SENDER.sendGroupMsg(groupMsg, BotRepackaging.sendImage(time));
+        }
+    }
+
     //启动&关闭控制
     @OnGroup
     @Filters({@Filter(value = "robot", matchType = MatchType.CONTAINS), @Filter(value = "bot", matchType = MatchType.CONTAINS)})

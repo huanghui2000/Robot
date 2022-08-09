@@ -2,6 +2,7 @@ package all.plug;
 
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -14,6 +15,7 @@ import java.util.*;
  * 存放基础需使用数据以及对数据操作
  * Time city image
  */
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class Basics {
 
     //对于URL获取流的处理
@@ -75,4 +77,14 @@ public class Basics {
         return null;
     }
 
+    //将image文件夹下的图片除了Happy.jpg清空
+    public static void clearImage() {
+        File file = new File("./image");
+        File[] files = file.listFiles();
+        assert files != null;
+        for (File f : files) {
+            if (!f.getName().equals("Happy.jpg"))
+                f.delete();
+        }
+    }
 }

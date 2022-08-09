@@ -53,9 +53,10 @@ public class TextParsing {
             txt = WeatherAPI.getTodayWeather(Basics.getCity(txt), 1);
         else if (txt.contains("TIME"))
             txt = Basics.getTime(DatePattern.NORM_TIME_PATTERN);
-        else if (txt.contains("NEW")) {
+        else if (txt.contains("NEW"))
             txt = NewAPI.getNew();
-        }
+        else if (txt.contains("CLEAR"))
+            Basics.clearImage();
         return txt;
     }
 
@@ -98,4 +99,5 @@ public class TextParsing {
             this.things = things;
         }
     }
+
 }
