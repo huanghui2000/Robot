@@ -8,10 +8,6 @@ import java.net.URL;
 
 public class NewAPI {
 
-    public static void main(String[] args) throws Exception {
-        System.out.println(getNew());
-    }
-
     //获取每日新闻
     public static String getNew() throws Exception {
         String url = "https://api.qqsuu.cn/api/60s?type=json";
@@ -23,21 +19,19 @@ public class NewAPI {
         JSONArray time = jb.getJSONArray("time");
         //遍历time数组，拼接为一条字符串
         StringBuilder timeStr = new StringBuilder();
-        for (int i = 0; i < time.size(); i++) {
+        for (int i = 0; i < time.size(); i++)
             timeStr.append(time.getString(i)).append("，");
-        }
         JSONArray data = jb.getJSONArray("data");
         //遍历data数组，拼接为一条字符串
         StringBuilder dataStr = new StringBuilder();
         for (int i = 0; i < data.size(); i++) {
             if (i < data.size() - 1)
-                dataStr.append(i).append(1).append("、");
-            dataStr.append(data.getString(i));
+                dataStr.append(i + 1).append("、");
+            //去除字符串中的'<'和'>'之间的内容，以及i、的内容
+            dataStr.append(data.getString(i).replaceAll("<.*?>", "").replaceAll((i + 1) + "、", ""));
             if (i < data.size() - 1)
                 dataStr.append("；\n\n");
         }
-
         return timeStr + nameStr + "\n\n" + dataStr;
     }
-
 }

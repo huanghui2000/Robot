@@ -67,11 +67,28 @@ public class GroupListener {
     }
 
     @OnGroup
-    @Filters({@Filter(value = "涩图", matchType = MatchType.CONTAINS), @Filter(value = "来张图", matchType = MatchType.CONTAINS)})
+    @Filter(value = "来.*张图", matchType = MatchType.REGEX_MATCHES)
     public void getChart(GroupMsg groupMsg, MsgSender sender) {
         if (Open) {
-            long time = ChartAPI.getImage();
-            sender.SENDER.sendGroupMsg(groupMsg, BotRepackaging.sendImage(time));
+            int number = ChartAPI.getNumber(groupMsg.getMsgContent().getMsg());
+            //倘若数字小于1或者大于10，则返回图片数量信息错误
+            if (number < 0 || number > 10)
+                sender.SENDER.sendGroupMsg(groupMsg, "图片数量错误");
+            else {
+                //新建一个线程，每0.5秒发送一张图片,结束销毁线程
+                Thread thread = new Thread(() -> {
+                    for (int i = 0; i < number; i++) {
+                        long time = ChartAPI.getImage();
+                        sender.SENDER.sendGroupMsg(groupMsg, BotRepackaging.sendImage(time));
+                        try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                thread.start();
+            }
         }
     }
 
@@ -82,6 +99,7 @@ public class GroupListener {
         String control = String.valueOf(groupMsg.getMsgContent());
         if (String.valueOf(control).contains("重启")) {
             sender.SENDER.sendGroupMsg(groupMsg, "服务器已重启");
+            sender.SENDER.sendGroupMsg(groupMsg, "服务器时间" + Basics.getTime(DatePattern.NORM_TIME_PATTERN));
             Open = true;
         } else if (String.valueOf(control).contains("启动")) {
             if (Open)
