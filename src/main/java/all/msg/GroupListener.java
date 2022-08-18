@@ -17,6 +17,17 @@ public class GroupListener {
     //启动&关闭控制
     static boolean Open = true;
 
+    @OnGroup
+    @Filters({@Filter(value = "丢.*个骰子", matchType = MatchType.REGEX_MATCHES), @Filter(value = "丢骰子", matchType = MatchType.REGEX_MATCHES), @Filter(value = "丢个骰子", matchType = MatchType.REGEX_MATCHES)})
+    public void onDice(GroupMsg groupMsg, MsgSender sender) {
+        int number = Basics.getNumber(groupMsg.getMsgContent().getMsg(), "来", "个");
+        if (number > 0 && number < 10)
+            for (int i = 0; i < number; i++)
+                sender.SENDER.sendGroupMsg(groupMsg, "[CAT:dice,random=true]");
+        else sender.SENDER.sendGroupMsg(groupMsg, "骰子数量错误");
+
+    }
+
     //对诗功能
     @OnGroup
     @Filter(atBot = true, matchType = MatchType.CONTAINS)
@@ -62,17 +73,22 @@ public class GroupListener {
     @OnGroup
     @Filter(value = "翻译", matchType = MatchType.CONTAINS)
     public void at(GroupMsg groupMsg, MsgSender sender) throws Exception {
-        if (Open)
-            sender.SENDER.sendGroupMsg(groupMsg, TranslateAPI.getLanguage(groupMsg.getMsgContent().getMsg()));
+        if (Open) {
+            //判断最开头两个字是不是”语音“
+            if (groupMsg.getMsg().startsWith("语音翻译"))
+                sender.SENDER.sendGroupMsg(groupMsg, "[CAT:voice,file=/www/wwwroot/QQRot/image/" + TranslateAPI.getLanguage(groupMsg.getMsgContent().getMsg()) + ".wav]");
+            else
+                sender.SENDER.sendGroupMsg(groupMsg, TranslateAPI.getLanguage(groupMsg.getMsgContent().getMsg()));
+        }
     }
 
     @OnGroup
-    @Filter(value = "来.*张图", matchType = MatchType.REGEX_MATCHES)
+    @Filters({@Filter(value = "来.*张图", matchType = MatchType.REGEX_MATCHES), @Filter(value = "来张图", matchType = MatchType.REGEX_MATCHES)})
     public void getChart(GroupMsg groupMsg, MsgSender sender) {
         if (Open) {
-            int number = ChartAPI.getNumber(groupMsg.getMsgContent().getMsg());
+            int number = Basics.getNumber(groupMsg.getMsgContent().getMsg(), "来", "张");
             //倘若数字小于1或者大于10，则返回图片数量信息错误
-            if (number < 0 || number > 10)
+            if (number <= 0 || number > 10)
                 sender.SENDER.sendGroupMsg(groupMsg, "图片数量错误");
             else {
                 //新建一个线程，每0.5秒发送一张图片,结束销毁线程

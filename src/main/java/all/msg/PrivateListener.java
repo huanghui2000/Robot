@@ -12,7 +12,6 @@ public class PrivateListener {
     //私聊敷衍
     @OnPrivate
     public void privateMsg(PrivateMsg privateMsg, MsgSender sender) {
-        sender.SENDER.sendPrivateMsg(privateMsg, "大哥好！");
         sender.SENDER.sendPrivateMsg(privateMsg, BotRepackaging.sendImage(1));
     }
 

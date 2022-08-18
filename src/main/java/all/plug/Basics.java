@@ -1,10 +1,7 @@
 package all.plug;
 
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
@@ -15,8 +12,16 @@ import java.util.*;
  * 存放基础需使用数据以及对数据操作
  * Time city image
  */
-@SuppressWarnings("ResultOfMethodCallIgnored")
+@SuppressWarnings({"ResultOfMethodCallIgnored", "unused"})
 public class Basics {
+
+
+    //获取某个文件中的所有内容
+    public static String getFileContent(String path) throws Exception {
+        DataInputStream in = new DataInputStream(new FileInputStream(path));
+        BufferedReader d = new BufferedReader(new InputStreamReader(in));
+        return d.readLine();
+    }
 
     //对于URL获取流的处理
     public static StringBuilder getStringBuilder(URL url, int time) throws IOException {
@@ -38,6 +43,46 @@ public class Basics {
     public static String getTime(String format) {
         SimpleDateFormat time = new SimpleDateFormat(format);
         return time.format(new Date());
+    }
+
+    //解析汉字数字
+    public static int getNumber(String str, String topStr, String endStr) {
+        int start = str.indexOf(topStr);
+        int end = str.indexOf(endStr);
+        //判断是否重合，若有返回1
+        if (start == end)
+            return 1;
+        //获取汉字数字
+        String number = str.substring(start + 1, end);
+        //判断是否为数字，若是则返回数字
+        if (number.matches("[0-9]+"))
+            return Integer.parseInt(number);
+        //将汉字一二三。。。十转换为数字
+        switch (number) {
+            case "一":
+                return 1;
+            case "二":
+            case "两":
+                return 2;
+            case "三":
+                return 3;
+            case "四":
+                return 4;
+            case "五":
+                return 5;
+            case "六":
+                return 6;
+            case "七":
+                return 7;
+            case "八":
+                return 8;
+            case "九":
+                return 9;
+            case "十":
+                return 10;
+            default:
+                return 0;
+        }
     }
 
     //获取星期

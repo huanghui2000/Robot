@@ -44,44 +44,4 @@ public class ChartAPI {
         return new URL(jsonObject.getString("pic").substring(2, jsonObject.getString("pic").length() - 2));
     }
 
-    //解析来X张图中的汉字数字
-    public static int getNumber(String str) {
-        //找到来和张图中的字符
-        int start = str.indexOf("来");
-        int end = str.indexOf("张");
-        //判断来和张是否重合，若有返回1
-        if (start == end)
-            return 1;
-        //获取汉字数字
-        String number = str.substring(start + 1, end);
-        //判断是否为数字，若是则返回数字
-        if (number.matches("[0-9]+"))
-            return Integer.parseInt(number);
-        //将汉字一二三。。。十转换为数字
-        switch (number) {
-            case "一":
-                return 1;
-            case "二":
-            case "两":
-                return 2;
-            case "三":
-                return 3;
-            case "四":
-                return 4;
-            case "五":
-                return 5;
-            case "六":
-                return 6;
-            case "七":
-                return 7;
-            case "八":
-                return 8;
-            case "九":
-                return 9;
-            case "十":
-                return 10;
-            default:
-                return 0;
-        }
-    }
 }
