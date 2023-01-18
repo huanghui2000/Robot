@@ -1,11 +1,14 @@
 package all.api;
 
-import all.BotLanguage.Keyword;
-import all.BotLanguage.Type;
+import all.botLanguage.Keyword;
+import all.botLanguage.Type;
 import all.plug.Basics;
 
 import java.net.URL;
 
+/**
+ * 查歌词API
+ */
 @SuppressWarnings("unused")
 @Type("API")
 public class MusicAPI {

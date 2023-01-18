@@ -1,6 +1,5 @@
 package all.plug;
 
-
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
@@ -12,7 +11,7 @@ import java.util.Date;
 
 /**
  * 存放基础需使用数据以及对数据操作
- * Time city image
+ * Time city image等
  */
 @SuppressWarnings({"ResultOfMethodCallIgnored", "unused"})
 public class Basics {
@@ -100,45 +99,6 @@ public class Basics {
         return time.format(new Date());
     }
 
-    //解析汉字数字
-    public static int getNumber(String str, String topStr, String endStr) {
-        int start = str.indexOf(topStr);
-        int end = str.indexOf(endStr);
-        //判断是否重合，若有返回1
-        if (start == end)
-            return 1;
-        //获取汉字数字
-        String number = str.substring(start + 1, end);
-        //判断是否为数字，若是则返回数字
-        if (number.matches("[0-9]+"))
-            return Integer.parseInt(number);
-        //将汉字一二三。。。十转换为数字
-        switch (number) {
-            case "一":
-                return 1;
-            case "二":
-            case "两":
-                return 2;
-            case "三":
-                return 3;
-            case "四":
-                return 4;
-            case "五":
-                return 5;
-            case "六":
-                return 6;
-            case "七":
-                return 7;
-            case "八":
-                return 8;
-            case "九":
-                return 9;
-            case "十":
-                return 10;
-            default:
-                return 0;
-        }
-    }
 
     //获取星期
     public static String getWeek() {
@@ -187,4 +147,22 @@ public class Basics {
                 f.delete();
         }
     }
+
+    //计算两个时间只差，时间A早于时间B且时间格式为HH:mm
+    public static int timeDifference(String timeA, String timeB) {
+        String[] timeAArray = timeA.split(":");
+        String[] timeBArray = timeB.split(":");
+        int hourA = Integer.parseInt(timeAArray[0]);
+        int hourB = Integer.parseInt(timeBArray[0]);
+        int minuteA = Integer.parseInt(timeAArray[1]);
+        int minuteB = Integer.parseInt(timeBArray[1]);
+        return (hourB - hourA) * 60 + minuteB - minuteA;
+    }
+
+    //判断运行环境是jar还是idea
+    public static boolean isJar() {
+        //如果文件地址中出现:则为idea
+        return !System.getProperty("java.class.path").contains(":");
+    }
+
 }

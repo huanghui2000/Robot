@@ -1,14 +1,14 @@
 package all.api;
 
-import all.BotLanguage.Keyword;
-import all.BotLanguage.Type;
+import all.botLanguage.Keyword;
+import all.botLanguage.Type;
 import all.plug.Basics;
 
 import java.net.URL;
 
-/*
+/**
  * 查询诗歌API
- * */
+ */
 @SuppressWarnings("unused")
 @Type("API")
 public class PoetryAPI {
@@ -18,7 +18,6 @@ public class PoetryAPI {
     public static String getPoetry(String Msg) {
         String data = Msg.replace("查诗", "");
         data = data.replace(" ", "");
-        data = getChinaText(data);
         String text;
         try {
             text = getText(data);
@@ -30,21 +29,6 @@ public class PoetryAPI {
             return getString(text);
         else
             return null;
-    }
-
-    //将语句中英文符号替换成中文符号
-    private static String getChinaText(String text) {
-        //去掉末尾的特殊符号
-        if (text.charAt(text.length() - 1) == '，' || text.charAt(text.length() - 1) == '？' || text.charAt(text.length() - 1) == '！' || text.charAt(text.length() - 1) == '。')
-            text = text.substring(0, text.length() - 1);
-
-        //将英文符号替换成中文符号
-        text = text.replace(",", "，");
-        text = text.replace(".", "。");
-        text = text.replace("?", "？");
-        text = text.replace("!", "！");
-        text = text.replace(":", "：");
-        return text;
     }
 
     //查询是否是存在古诗词

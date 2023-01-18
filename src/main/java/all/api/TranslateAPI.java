@@ -1,7 +1,7 @@
 package all.api;
 
-import all.BotLanguage.Keyword;
-import all.BotLanguage.Type;
+import all.botLanguage.Keyword;
+import all.botLanguage.Type;
 import all.plug.Basics;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -13,9 +13,9 @@ import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.Map;
 
-/*
- *各种语种翻译为中文
- *最喜欢的例句:I've been breathing for a long time to cover my tears. I'm mourning how difficult the people's livelihood is
+/**
+ * 各种语种翻译为中文
+ * 最喜欢的例句:I've been breathing for a long time to cover my tears. I'm mourning how difficult the people's livelihood is
  */
 @SuppressWarnings("unused")
 @Type("API")
@@ -52,7 +52,7 @@ public class TranslateAPI {
 
     //语句中的语种解析
     @Keyword("翻译")
-    public static String getLanguage(String said)  {
+    public static String getLanguage(String said) {
         //判断文本开头是否为”语音“，建立一个boolean变量，并且把语音切除
         //提取语种和对应符号集
         Map<String, String> map = getStrMap();

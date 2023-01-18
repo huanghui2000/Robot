@@ -1,4 +1,4 @@
-package all.BotLanguage;
+package all.botLanguage;
 
 import java.util.Map;
 

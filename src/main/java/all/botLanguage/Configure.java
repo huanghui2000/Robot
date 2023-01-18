@@ -1,4 +1,4 @@
-package all.BotLanguage;
+package all.botLanguage;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -13,9 +13,10 @@ public class Configure {
 
     private static List<BQL> getBqls = AnnotateAssembly();
 
-    public static List<BQL> getGetBqls() {
+    public static List<BQL> getBqls() {
         return getBqls;
     }
+
 
     //对注解的类进行装配
     private static List<BQL> AnnotateAssembly() {
@@ -25,20 +26,21 @@ public class Configure {
             try {
                 //遍历所有类，获取配置了Type的类
                 Class<?> clazz = Class.forName(line);
-                BQL bql = new BQL();
                 //获取类中配置了Keyword的方法,并且将方法名装配
                 if (clazz.isAnnotationPresent(Type.class)) {
                     //设置type为注释关键字
-                    bql.setType(clazz.getAnnotation(Type.class).value());
-                    for (Method method : clazz.getDeclaredMethods())
+                    for (Method method : clazz.getDeclaredMethods()) {
                         //添加keyword，格式为key:关键之 value:类名:方法名
                         if (method.isAnnotationPresent(Keyword.class)) {
+                            BQL bql = new BQL();
+                            bql.setType(clazz.getAnnotation(Type.class).value());
                             Map<String, String> map = new HashMap<>();
                             map.put(method.getAnnotation(Keyword.class).value(), line + ":" + method.getName());
                             bql.setKeywords(map);
+                            if (bql.getKeywords() != null)
+                                bqls.add(bql);
                         }
-                    if (bql.getKeywords() != null)
-                        bqls.add(bql);
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -53,9 +55,11 @@ public class Configure {
     private static List<BQL> getMerge(List<BQL> bqls) {
         List<BQL> newBqls = new ArrayList<>();
         for (BQL bql : bqls) {
+            //开头直接添加
             if (newBqls.size() == 0) {
                 newBqls.add(bql);
             } else {
+                //对比是否有相同的type
                 boolean flag = false;
                 for (BQL bql1 : newBqls) {
                     if (bql1.getType().equals(bql.getType())) {

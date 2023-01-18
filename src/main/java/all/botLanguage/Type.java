@@ -1,4 +1,4 @@
-package all.BotLanguage;
+package all.botLanguage;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
